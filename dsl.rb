@@ -20,8 +20,21 @@ class Recipe
     @instructions = text
   end
 
-  def option(name, &block)
-    @ingredients << Option.new(name, &block)
+  def option(&block)
+    @ingredients << Option.new(&block)
+  end
+
+  def contains(ingredients)
+    all = []
+    @ingredients.each do |ingredient|
+      if ingredient.kind_of?(Option) # yuck
+        all << ingredient.options
+      else
+        all << ingredient
+      end
+    end
+    intersection = all.flatten.collect(&:name) & ingredients
+    !intersection.empty?
   end
 
 end
@@ -51,10 +64,9 @@ end
 
 class Option
 
-  attr_reader :name, :options
+  attr_reader :options
 
-  def initialize(name, &block)
-    @name = name
+  def initialize(&block)
     @options = []
     instance_eval(&block)
   end
@@ -79,8 +91,7 @@ class RecipeDB
   def find_by_ingredients(ingredients)
     matches = []
     @recipes.each do |name, recipe|
-      intersection = recipe.ingredients.collect(&:name) & ingredients
-      matches << recipe if !intersection.empty?
+      matches << recipe if recipe.contains(ingredients)
     end
     matches
   end

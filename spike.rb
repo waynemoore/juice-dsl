@@ -1,7 +1,8 @@
 require_relative 'data'
 require_relative 'views'
 
-rcps = @db.find_by_ingredients([:cranberry])
+# TODO, searching options doesn't work
+rcps = @db.find_by_ingredients([:carrot])
 
 rcps.each do |recipe|
   TextRecipeView.new(recipe).render
