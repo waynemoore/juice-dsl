@@ -171,3 +171,15 @@ recipe 'kale and hearty' do
 
   instructions 'Juice the kale and the wheatgrass; stir in the spirulina powder. Serve in a small glass decorated with wheatgrass blades.'
 end
+
+recipe 'sweet beets' do
+  makes 400, :milliliters
+
+  ingredient :beetroot, 100, :grabs # 1 small beetroot
+  ingredient :carrot, 200, :grams # two medium carrots
+  ingredient :apple, 150, :grams # medium apple
+  ingredient :ginger, 10, :grams # 1cm cubed
+  ingredient :celery, 40, :grams # 1 stick celery
+
+  instructions 'Juice all ingredients.  Dilute slightly with water.'
+end
