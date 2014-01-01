@@ -1,3 +1,6 @@
+require 'singleton'
+
+
 class Recipe
 
   attr_reader :name, :quantity, :ingredients, :instructions
@@ -37,6 +40,15 @@ class Recipe
     !intersection.empty?
   end
 
+  def to_json(*a)
+    {
+      :name => @name,
+      :quanty => @quantity,
+      :ingredients => @ingredients,
+      :instructions => @instructions,
+    }.to_json(*a)
+  end
+
 end
 
 class Quantity
@@ -48,6 +60,12 @@ class Quantity
     @unit = unit
   end
 
+  def to_json(*a)
+    {
+      :measure => @measure,
+      :unit => @unit,
+    }.to_json(*a)
+  end
 end
 
 class Ingredient
@@ -60,6 +78,13 @@ class Ingredient
     @quantity = quantity
   end
 
+  def to_json(*a)
+    {
+      :name => @name,
+      :type => @type,
+      :quantity => @quantity,
+    }.to_json(*a)
+  end
 end
 
 class Option
@@ -75,9 +100,14 @@ class Option
     @options << Ingredient.new(name, extra[:type], Quantity.new(measure, unit))
   end
 
+  def to_json(*a)
+    @options.to_json(*a)
+  end
 end
 
 class RecipeDB
+
+  include Singleton
 
   def initialize
     @recipes = {}
@@ -96,9 +126,12 @@ class RecipeDB
     matches
   end
 
+  def all
+    @recipes.values
+  end
+
 end
 
 def recipe(name, &block)
-  @db ||= RecipeDB.new
-  @db.store(Recipe.new(name, &block))
+  RecipeDB.instance.store(Recipe.new(name, &block))
 end
