@@ -3,6 +3,10 @@ require 'json'
 require_relative 'dsl'
 require_relative 'data'
 
+get '/' do
+  haml :index
+end
+
 get '/juices' do
   content_type :json
 
